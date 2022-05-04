@@ -26,10 +26,7 @@ export default {
     like: function (event) {
       axios
         .post("http://localhost:1337/api/characters/", {
-          fullName: this.character.full,
-          firstName: this.character.first,
-          lastName: this.character.last,
-          imageUrl: this.character.image,
+          characterId: this.character.id,
         })
         .then(() => {
           this.character.liked = true;

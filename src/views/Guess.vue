@@ -58,7 +58,6 @@ export default {
         .get(`http://localhost:1337/api/graphql/getRandom`)
         .then((response) => {
           this.character = response.data;
-          console.log(response.data);
         })
         .catch((error) => {
           this.getRandomCharacter();

@@ -45,9 +45,7 @@ export default {
         .then((response) => {
           this.characters = response.data;
         })
-        .catch((error) => {
-          console.log(error);
-        })
+        .catch((error) => console.log(error))
         .finally(() => {
           this.isLoading = false;
         });

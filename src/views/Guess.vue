@@ -3,7 +3,11 @@
     <guessCharacterCard class="mt-2" v-if="character" :character="character" />
     <form @submit="check">
       <div>
-        <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900">Qui est-ce ?</label>
+        <label
+          for="first_name"
+          class="block mb-2 text-sm font-medium text-gray-900"
+          >Qui est-ce ?</label
+        >
         <input
           type="text"
           v-model="answerInput"
@@ -40,12 +44,16 @@ export default {
   methods: {
     check: function (event) {
       event.preventDefault();
-      if (this.answerInput.toLowerCase() === this.character.full.toLowerCase()) {
+      if (
+        this.answerInput.toLowerCase() === this.character.full.toLowerCase()
+      ) {
         this.score = this.score + 1;
         this.answerInput = "";
         this.getRandomCharacter();
       } else {
-        this.bestScore = this.score;
+        if (this.score > this.bestScore) {
+          this.bestScore = this.score;
+        }
         this.score = 0;
         this.answerInput = "";
         this.getRandomCharacter();
@@ -58,6 +66,7 @@ export default {
         .get(`http://localhost:1337/api/graphql/getRandom`)
         .then((response) => {
           this.character = response.data;
+          console.log(this.character.full);
         })
         .catch((error) => {
           this.getRandomCharacter();

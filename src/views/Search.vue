@@ -1,7 +1,11 @@
 <template lang="">
   <div class="mx-auto max-w-6xl mt-3">
     <form @submit="search">
-      <label for="search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300">Your Email</label>
+      <label
+        for="search"
+        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300"
+        >Your Email</label
+      >
       <div class="relative">
         <input
           type="search"
@@ -15,13 +19,33 @@
           type="submit"
           class="text-white absolute right-2.5 bottom-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-4 py-1 text-center inline-flex items-center"
         >
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+          <svg
+            class="w-6 h-6"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+              clip-rule="evenodd"
+            ></path>
           </svg>
         </button>
       </div>
     </form>
-    <div class="mt-3 grid grid-cols-6"><characterCard v-for="character in characters" :key="character" :character="character" /></div>
+    <div class="mt-3">
+      <div class="grid grid-cols-6">
+        <characterCard
+          v-for="character in characters"
+          :key="character"
+          :character="character"
+        />
+        <div class="flex justify-center my-3">
+          <p v-if="showMessage">Aucun personnage trouvé</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -35,15 +59,24 @@ export default {
     characters: [],
     isLoading: false,
     searchInput: "",
+    showMessage: false,
   }),
   methods: {
     search: function (event) {
       event.preventDefault();
       this.isLoading = true;
+      this.showMessage = false;
       axios
-        .get(`http://localhost:1337/api/graphql/getByAnime/${encodeURIComponent(this.searchInput)}`)
+        .get(
+          `http://localhost:1337/api/graphql/getByAnime/${encodeURIComponent(
+            this.searchInput
+          )}`
+        )
         .then((response) => {
           this.characters = response.data;
+          if (this.characters.length == 0) {
+            this.showMessage = true;
+          }
         })
         .catch((error) => console.log(error))
         .finally(() => {
